@@ -1,0 +1,53 @@
+{
+  "name": "anacan.az---müasir-ana-platforması",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+        "migrate:appwrite": "tsx scripts/appwrite-migration.ts",
+        "seed:categories": "tsx scripts/seed-categories.ts",
+        "seed:menu": "tsx scripts/seed-menu-items.ts",
+        "seed:stories": "tsx scripts/seed-stories.ts",
+        "seed:ad-spaces": "tsx scripts/seed-ad-spaces.ts",
+        "seed:static-pages": "tsx scripts/seed-static-pages.ts",
+        "fix:posts-content": "tsx scripts/fix-posts-content-attributes.ts",
+        "migrate:menus-pages": "tsx scripts/add-menus-and-pages-collections.ts",
+        "migrate:stories": "tsx scripts/add-stories-collection.ts",
+        "migrate:newsletter": "tsx scripts/add-newsletter-collection.ts",
+        "migrate:community": "tsx scripts/add-community-collections.ts",
+        "seed:forum-categories": "tsx scripts/seed-forum-categories.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^1.34.0",
+    "@tiptap/extension-image": "^3.14.0",
+    "@tiptap/extension-link": "^3.14.0",
+    "@tiptap/extension-placeholder": "^3.14.0",
+    "@tiptap/react": "^3.14.0",
+    "@tiptap/starter-kit": "^3.14.0",
+    "appwrite": "^21.5.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "6.22.3",
+    "uuid": "9.0.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "dotenv": "^17.2.3",
+    "jsdom": "^27.4.0",
+    "node-appwrite": "^21.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0",
+    "vitest": "^4.0.16"
+  }
+}

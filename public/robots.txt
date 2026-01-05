@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile/
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+
+# Sitemaps
+Sitemap: https://anacan.az/sitemap.xml
+Sitemap: https://anacan.az/sitemap-az.xml
+Sitemap: https://anacan.az/sitemap-ru.xml
