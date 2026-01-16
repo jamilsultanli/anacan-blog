@@ -220,7 +220,6 @@ export default defineConfig(({ mode }) => {
         },
         chunkSizeWarningLimit: 1000,
         cssCodeSplit: true,
-        cssMinify: 'lightningcss',
         assetsInlineLimit: 4096, // 4kb
         minify: 'terser',
         terserOptions: {
