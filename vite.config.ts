@@ -221,14 +221,7 @@ export default defineConfig(({ mode }) => {
         chunkSizeWarningLimit: 1000,
         cssCodeSplit: true,
         assetsInlineLimit: 4096, // 4kb
-        minify: 'terser',
-        terserOptions: {
-          compress: {
-            drop_console: mode === 'production',
-            drop_debugger: mode === 'production',
-            pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
-          },
-        },
+        minify: 'esbuild', // Use esbuild (default, faster than terser)
         sourcemap: mode === 'development',
       },
     };
