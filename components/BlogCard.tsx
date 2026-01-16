@@ -20,15 +20,16 @@ const BlogCard: React.FC<BlogCardProps> = memo(({ post, category, featured = fal
       className="group block bg-white rounded-airbnb-xl overflow-hidden hover:shadow-airbnb-lg transition-all duration-300 h-full flex flex-col border border-gray-100"
     >
       {/* Image Section */}
-      <div className="relative h-64 bg-gray-100 overflow-hidden">
+      <div className="relative bg-gray-100 overflow-hidden" style={{ aspectRatio: '16/9' }}>
         {post.imageUrl ? (
           <LazyImage 
             src={post.imageUrl} 
             alt={post.title[locale]} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+            aspectRatio="16/9"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
             <span className="text-6xl opacity-20">{category?.icon || '📝'}</span>
           </div>
         )}

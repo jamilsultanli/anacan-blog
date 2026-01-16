@@ -194,13 +194,43 @@ export default defineConfig(({ mode }) => {
       build: {
         rollupOptions: {
           output: {
-            manualChunks: {
-              'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-              'editor-vendor': ['@tiptap/react', '@tiptap/starter-kit'],
+            manualChunks: (id) => {
+              // Vendor chunks
+              if (id.includes('node_modules')) {
+                // React vendor
+                if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+                  return 'react-vendor';
+                }
+                // Editor vendor - lazy loaded only when needed (admin routes)
+                if (id.includes('@tiptap') || id.includes('prosemirror')) {
+                  return 'editor-vendor';
+                }
+                // Appwrite vendor
+                if (id.includes('appwrite')) {
+                  return 'appwrite-vendor';
+                }
+                return 'vendor';
+              }
+              // Don't create editor chunk unless it's actually used
+              if (id.includes('admin') && (id.includes('PostEditor') || id.includes('RichTextEditor'))) {
+                return 'editor-vendor';
+              }
             },
           },
         },
         chunkSizeWarningLimit: 1000,
+        cssCodeSplit: true,
+        cssMinify: 'lightningcss',
+        assetsInlineLimit: 4096, // 4kb
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: mode === 'production',
+            drop_debugger: mode === 'production',
+            pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
+          },
+        },
+        sourcemap: mode === 'development',
       },
     };
 });

@@ -132,18 +132,22 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="pt-8 border-t border-gray-100 text-center">
-          <p className="text-xs text-gray-500 mb-2">
+          <p className="text-xs text-gray-600 mb-2">
             © {new Date().getFullYear()} Anacan.az. {copyrightText}
           </p>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-600">
             {locale === 'az' ? 'Hazırlanıb' : 'Разработано'} <a 
               href="https://atlasoon.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-coral-500 hover:text-coral-600 font-semibold transition-colors"
+              className="text-coral-600 hover:text-coral-700 font-semibold transition-colors"
+              style={{ color: '#e64a4f' }}
             >
               Atlasoon
             </a>
+          </p>
+          <p className="text-xs text-gray-600 mt-2">
+            {brandText}
           </p>
         </div>
       </div>

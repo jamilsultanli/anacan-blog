@@ -81,13 +81,15 @@ const Hero: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
             <Link 
               to="/blog"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-coral-500 text-white rounded-full font-semibold text-sm sm:text-base hover:bg-coral-600 transition-all duration-200 shadow-airbnb hover:shadow-airbnb-lg transform hover:scale-105 text-center"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-coral-600 text-white rounded-full font-semibold text-sm sm:text-base hover:bg-coral-700 transition-all duration-200 shadow-airbnb hover:shadow-airbnb-lg transform hover:scale-105 text-center"
+              style={{ color: '#FFFFFF' }}
             >
               {heroContent.cta}
             </Link>
             <Link 
               to="/forums"
               className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white text-gray-900 border-2 border-gray-300 rounded-full font-semibold text-sm sm:text-base hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md text-center"
+              style={{ color: '#111827' }}
             >
               {locale === 'az' ? 'Forumlara bax' : 'Посмотреть форумы'}
             </Link>

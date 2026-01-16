@@ -66,11 +66,13 @@ const MobileBottomNav: React.FC = () => {
               to={item.path}
               className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-colors min-w-[60px] ${
                 isActive
-                  ? 'text-pink-600 bg-pink-50'
-                  : 'text-gray-600 hover:text-pink-600'
+                  ? 'text-pink-700 bg-pink-50'
+                  : 'text-gray-700 hover:text-pink-700'
               }`}
+              aria-label={item.label}
+              style={isActive ? { color: '#be185d' } : { color: '#374151' }}
             >
-              <span className="text-2xl mb-1">{item.icon}</span>
+              <span className="text-2xl mb-1" aria-hidden="true">{item.icon}</span>
               <span className="text-xs font-medium">{item.label}</span>
             </Link>
           );

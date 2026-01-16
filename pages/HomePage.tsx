@@ -127,15 +127,16 @@ const HomePage: React.FC = () => {
                     to={`/blog/${post.slug}`}
                     className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
                   >
-                    <div className="relative h-48 sm:h-56 md:h-64 bg-gray-100 overflow-hidden flex-shrink-0">
+                    <div className="relative bg-gray-100 overflow-hidden flex-shrink-0" style={{ aspectRatio: '16/9' }}>
                       {post.imageUrl ? (
                         <LazyImage 
                           src={post.imageUrl} 
                           alt={post.title[locale]} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          aspectRatio="16/9"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
                           <span className="text-4xl sm:text-5xl md:text-6xl opacity-20">{category?.icon || '📝'}</span>
                         </div>
                       )}
@@ -183,7 +184,8 @@ const HomePage: React.FC = () => {
                   <button
                     onClick={() => setFeaturedIndex(Math.max(0, featuredIndex - 3))}
                     disabled={featuredIndex === 0}
-                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                    style={{ color: '#be185d' }}
                   >
                     {locale === 'az' ? '← Əvvəlki' : '← Предыдущие'}
                   </button>
@@ -193,7 +195,8 @@ const HomePage: React.FC = () => {
                   <button
                     onClick={() => setFeaturedIndex(Math.min(featuredPosts.length - 3, featuredIndex + 3))}
                     disabled={!hasMore}
-                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                    style={{ color: '#be185d' }}
                   >
                     {locale === 'az' ? 'Növbəti →' : 'Следующие →'}
                   </button>
@@ -245,15 +248,16 @@ const HomePage: React.FC = () => {
                         >
                           <article className="flex flex-col md:flex-row gap-6 pb-8 border-b border-gray-100 last:border-b-0">
                             <div className="md:w-48 flex-shrink-0">
-                              <div className="relative h-48 md:h-32 rounded-xl bg-gray-100 overflow-hidden">
+                              <div className="relative rounded-xl bg-gray-100 overflow-hidden" style={{ aspectRatio: '16/9' }}>
                                 {post.imageUrl ? (
                                   <LazyImage 
                                     src={post.imageUrl} 
                                     alt={post.title[locale]} 
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    aspectRatio="16/9"
                                   />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
                                     <span className="text-4xl opacity-20">{category?.icon || '📝'}</span>
                                   </div>
                                 )}
@@ -377,15 +381,16 @@ const HomePage: React.FC = () => {
                     to={`/blog/${post.slug}`}
                     className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="relative h-48 bg-gray-100 overflow-hidden">
+                    <div className="relative bg-gray-100 overflow-hidden" style={{ aspectRatio: '16/9' }}>
                       {post.imageUrl ? (
                         <LazyImage 
                           src={post.imageUrl} 
                           alt={post.title[locale]} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          aspectRatio="16/9"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
                           <span className="text-5xl opacity-20">{category?.icon || '📝'}</span>
                         </div>
                       )}
@@ -424,7 +429,8 @@ const HomePage: React.FC = () => {
                   <button
                     onClick={() => setTrendingIndex(Math.max(0, trendingIndex - 3))}
                     disabled={trendingIndex === 0}
-                    className="px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    style={{ color: '#be185d' }}
                   >
                     {locale === 'az' ? '← Əvvəlki' : '← Предыдущие'}
                   </button>
@@ -434,7 +440,8 @@ const HomePage: React.FC = () => {
                   <button
                     onClick={() => setTrendingIndex(Math.min(trendingPosts.length - 3, trendingIndex + 3))}
                     disabled={!hasMoreTrending}
-                    className="px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    style={{ color: '#be185d' }}
                   >
                     {locale === 'az' ? 'Növbəti →' : 'Следующие →'}
                   </button>

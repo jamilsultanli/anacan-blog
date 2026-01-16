@@ -54,14 +54,17 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <!-- Preconnect for Performance -->
+    <!-- Preconnect for Performance - Priority -->
     <link rel="preconnect" href="https://fra.cloud.appwrite.io" crossorigin>
     <link rel="dns-prefetch" href="https://fra.cloud.appwrite.io">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Fonts with display=swap for performance -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Fonts - Load asynchronously to prevent render blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
     
     <!-- Critical CSS (inline for above-the-fold content) -->
     <style>
@@ -154,6 +157,18 @@
                 loader.style.display = 'none';
             }
         });
+        
+        // Polyfill for preload link onload
+        (function() {
+            var links = document.querySelectorAll('link[rel="preload"][as="style"]');
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i];
+                var onload = link.onload;
+                link.onload = onload || function() {
+                    this.rel = 'stylesheet';
+                };
+            }
+        })();
     </script>
 </body>
 </html>
