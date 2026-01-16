@@ -22,6 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
+    let pollingTimeout: NodeJS.Timeout | null = null;
 
     // Initialize auth state - check for existing session
     const initAuth = async () => {
@@ -32,8 +33,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           setUser(currentUser);
           setLoading(false);
         }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
+      } catch (error: any) {
+        // Silently handle auth errors - 401 is expected when not logged in
         if (mounted) {
           setUser(null);
           setLoading(false);
@@ -45,27 +46,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     initAuth();
 
     // Set up auth state change listener with polling
+    // Delay polling to avoid duplicate requests with initAuth
     // Appwrite SDK doesn't have built-in onAuthStateChange, so we poll
-    try {
-      const result = authService.onAuthStateChange((user) => {
-        if (mounted) {
-          setUser(user);
-          // Only set loading to false after first check
-          if (loading) {
-            setLoading(false);
+    pollingTimeout = setTimeout(() => {
+      if (!mounted) return;
+      
+      try {
+        const result = authService.onAuthStateChange((user) => {
+          if (mounted) {
+            setUser(user);
+            // Only set loading to false after first check
+            if (loading) {
+              setLoading(false);
+            }
           }
+        });
+        subscription = result.data.subscription;
+      } catch (error) {
+        // Silently handle setup errors
+        if (mounted) {
+          setLoading(false);
         }
-      });
-      subscription = result.data.subscription;
-    } catch (error) {
-      console.error('Error setting up auth listener:', error);
-      if (mounted) {
-        setLoading(false);
       }
-    }
+    }, 2000); // Wait 2 seconds before starting polling to avoid duplicate requests
 
     return () => {
       mounted = false;
+      if (pollingTimeout) {
+        clearTimeout(pollingTimeout);
+      }
       subscription?.unsubscribe();
     };
   }, []); // Empty dependency array - only run once on mount

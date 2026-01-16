@@ -1,19 +1,24 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import './index.css';
 
-// Register service worker
+// Unregister all service workers (PWA disabled)
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        console.log('ServiceWorker registration successful:', registration.scope);
-      })
-      .catch((error) => {
-        console.log('ServiceWorker registration failed:', error);
-      });
-  });
+  // Unregister immediately on page load
+  (async () => {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (let registration of registrations) {
+        await registration.unregister();
+      }
+      // Clear all caches
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+    } catch (error) {
+      // Silently fail
+    }
+  })();
 }
 
 const rootElement = document.getElementById('root');

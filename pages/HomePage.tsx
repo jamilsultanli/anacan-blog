@@ -101,15 +101,15 @@ const HomePage: React.FC = () => {
         const hasMore = featuredPosts.length > featuredIndex + 3;
         
         return (
-        <section className="bg-white py-16 md:py-20">
+        <section className="bg-white py-12 sm:py-16 md:py-20 overflow-x-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-8 sm:mb-10 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 break-words w-full sm:w-auto">
                 {translations.featured_posts || (locale === 'az' ? 'Seçilmiş məqalələr' : 'Избранные статьи')}
               </h2>
               <Link 
                 to="/featured"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm flex items-center gap-2 transition-colors"
+                className="text-gray-600 hover:text-gray-900 font-medium text-sm flex items-center gap-2 transition-colors whitespace-nowrap flex-shrink-0"
               >
                 {locale === 'az' ? 'Hamısını gör' : 'Посмотреть все'}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,16 +118,16 @@ const HomePage: React.FC = () => {
               </Link>
             </div>
             <div className="relative">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {displayedFeatured.map((post) => {
                 const category = categories.find(c => c.id === post.categoryId);
                 return (
                   <Link
                     key={post.id}
                     to={`/blog/${post.slug}`}
-                    className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300"
+                    className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
                   >
-                    <div className="relative h-64 bg-gray-100 overflow-hidden">
+                    <div className="relative h-48 sm:h-56 md:h-64 bg-gray-100 overflow-hidden flex-shrink-0">
                       {post.imageUrl ? (
                         <LazyImage 
                           src={post.imageUrl} 
@@ -136,34 +136,34 @@ const HomePage: React.FC = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                          <span className="text-6xl opacity-20">{category?.icon || '📝'}</span>
+                          <span className="text-4xl sm:text-5xl md:text-6xl opacity-20">{category?.icon || '📝'}</span>
                         </div>
                       )}
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
                       {category && (
-                        <span className="inline-block text-xs font-semibold text-pink-600 uppercase tracking-wide mb-3">
+                        <span className="inline-block text-xs font-semibold text-pink-600 uppercase tracking-wide mb-2 sm:mb-3">
                           {category.name[locale]}
                         </span>
                       )}
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-pink-600 transition-colors line-clamp-2 leading-snug">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 group-hover:text-pink-600 transition-colors line-clamp-3 leading-tight sm:leading-snug min-h-[3.5rem] sm:min-h-[4rem] md:min-h-[4.5rem]">
                         {post.title[locale] || post.title.az || post.title.ru}
                       </h3>
                       {post.excerpt[locale] && (
-                        <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-3 leading-relaxed flex-grow">
                           {post.excerpt[locale]}
                         </p>
                       )}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-400 flex items-center justify-center text-white font-semibold text-xs">
+                      <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-auto">
+                        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-400 flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
                             {post.author?.[0]?.toUpperCase() || 'A'}
                           </div>
-                          <span className="text-sm text-gray-600 font-medium">
+                          <span className="text-xs sm:text-sm text-gray-600 font-medium truncate">
                             {post.author || 'Admin'}
                           </span>
                         </div>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap flex-shrink-0 ml-2">
                           {formatDate(
                             post.published_at || post.createdAt || Date.now(),
                             locale,
@@ -179,21 +179,21 @@ const HomePage: React.FC = () => {
               
               {/* Navigation buttons for featured posts */}
               {featuredPosts.length > 3 && (
-                <div className="flex items-center justify-center gap-4 mt-8">
+                <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
                   <button
                     onClick={() => setFeaturedIndex(Math.max(0, featuredIndex - 3))}
                     disabled={featuredIndex === 0}
-                    className="px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
                   >
                     {locale === 'az' ? '← Əvvəlki' : '← Предыдущие'}
                   </button>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs sm:text-sm text-gray-600 px-2">
                     {Math.floor(featuredIndex / 3) + 1} / {Math.ceil(featuredPosts.length / 3)}
                   </span>
                   <button
                     onClick={() => setFeaturedIndex(Math.min(featuredPosts.length - 3, featuredIndex + 3))}
                     disabled={!hasMore}
-                    className="px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 sm:px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
                   >
                     {locale === 'az' ? 'Növbəti →' : 'Следующие →'}
                   </button>
@@ -207,10 +207,10 @@ const HomePage: React.FC = () => {
 
       {/* Latest Posts - Two Column Layout */}
       {posts.length > 0 && (
-        <section className="bg-white py-16 md:py-20">
+        <section className="bg-white py-12 sm:py-16 md:py-20 overflow-x-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
                 {translations.latest_posts || (locale === 'az' ? 'Ən son məqalələr' : 'Последние статьи')}
               </h2>
               <Link 

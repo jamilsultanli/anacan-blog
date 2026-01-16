@@ -251,10 +251,11 @@ class AuthService {
   // Listen to auth state changes
   onAuthStateChange(callback: (user: User | null) => void) {
     // Appwrite doesn't have onAuthStateChange, so we'll use a polling approach
-    // Poll less frequently to avoid unnecessary requests
+    // Poll less frequently to avoid unnecessary requests and 401 errors
     let intervalId: NodeJS.Timeout | null = null;
     let lastUserId: string | null = null;
     let isPolling = true;
+    let consecutiveErrors = 0;
 
     const checkAuthState = async () => {
       if (!isPolling) return;
@@ -263,13 +264,27 @@ class AuthService {
         const currentUser = await this.getCurrentUser();
         const currentUserId = currentUser?.id || null;
         
+        // Reset error counter on success
+        consecutiveErrors = 0;
+        
         // Only call callback if user state actually changed
         if (currentUserId !== lastUserId) {
           lastUserId = currentUserId;
           callback(currentUser);
         }
-      } catch (error) {
-        // If error occurs, assume user is logged out
+      } catch (error: any) {
+        // If error occurs (including 401), assume user is logged out
+        // Silently handle 401 errors - they're expected when not logged in
+        consecutiveErrors++;
+        
+        // If we get multiple consecutive errors, reduce polling frequency
+        if (consecutiveErrors > 3 && intervalId) {
+          clearInterval(intervalId);
+          // Poll every 30 seconds instead of 5 seconds when not logged in
+          intervalId = setInterval(checkAuthState, 30000);
+        }
+        
+        // Only update state if it actually changed
         if (lastUserId !== null) {
           lastUserId = null;
           callback(null);
@@ -277,11 +292,12 @@ class AuthService {
       }
     };
 
-    // Check immediately
-    checkAuthState();
+    // Don't check immediately - let initAuth handle the first check
+    // This avoids duplicate requests on mount
 
-    // Poll every 5 seconds (reduced from 2 seconds to avoid too many requests)
-    intervalId = setInterval(checkAuthState, 5000);
+    // Poll every 15 seconds initially (less frequent to reduce 401 spam)
+    // This will be reduced to 30 seconds if user is not logged in
+    intervalId = setInterval(checkAuthState, 15000);
 
     // Return subscription object
     return {

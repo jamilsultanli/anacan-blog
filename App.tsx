@@ -1,5 +1,5 @@
-import React, { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
@@ -7,12 +7,15 @@ import Footer from './components/Footer';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import MobileBottomNav from './components/MobileBottomNav';
+import { initGA, trackPageView } from './utils/analytics';
+import { reportWebVitals } from './utils/webVitals';
 
 // Lazy load pages
 const HomePage = lazy(() => import('./pages/HomePage'));
 const PostDetailPage = lazy(() => import('./pages/PostDetailPage'));
 const CategoryPage = lazy(() => import('./pages/CategoryPage'));
 const StaticPage = lazy(() => import('./pages/StaticPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
@@ -56,17 +59,55 @@ const LoadingSpinner = () => (
 
 // Layout wrapper for public pages
 const PublicLayout: React.FC = () => (
-  <div className="min-h-screen flex flex-col bg-beige-50 font-sans selection:bg-pink-200">
+  <div className="min-h-screen flex flex-col bg-white font-sans selection:bg-coral-200 overflow-x-hidden w-full max-w-full">
     <Navbar />
-    <main className="flex-grow pb-16 md:pb-0">
+    <main className="flex-grow pb-16 md:pb-0 w-full max-w-full overflow-x-hidden">
       <Outlet />
     </main>
     <Footer />
-    <PWAInstallPrompt />
-    <OfflineIndicator />
+    {/* PWA features disabled */}
+    {/* <PWAInstallPrompt /> */}
+    {/* <OfflineIndicator /> */}
     <MobileBottomNav />
   </div>
 );
+
+// Analytics wrapper component
+const AnalyticsWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Initialize Google Analytics
+    const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (gaId) {
+      initGA(gaId);
+    }
+
+    // Report Web Vitals
+    reportWebVitals((metric) => {
+      if ((window as any).gtag) {
+        (window as any).gtag('event', metric.name, {
+          value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+          event_category: 'Web Vitals',
+          event_label: metric.id,
+          non_interaction: true,
+        });
+      }
+      
+      // Log to console in development
+      if (import.meta.env.DEV) {
+        console.log('[Web Vital]', metric);
+      }
+    });
+  }, []);
+
+  // Track page views
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+
+  return <>{children}</>;
+};
 
 const App: React.FC = () => {
   return (
@@ -74,6 +115,7 @@ const App: React.FC = () => {
       <LanguageProvider>
         <AuthProvider>
           <BrowserRouter>
+            <AnalyticsWrapper>
             <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               {/* Auth Routes - Must be before PublicLayout to avoid layout issues */}
@@ -88,6 +130,7 @@ const App: React.FC = () => {
                 <Route path="blog/:slug" element={<PostDetailPage />} />
                 <Route path="category/:slug" element={<CategoryPage />} />
                 <Route path="search" element={<SearchPage />} />
+                <Route path="haqqimizda" element={<AboutPage />} />
                 <Route path="elaqe" element={<ContactPage />} />
                 <Route path="forums" element={<ForumsPage />} />
                 <Route path="forums/:slug" element={<ForumTopicPage />} />
@@ -143,6 +186,7 @@ const App: React.FC = () => {
               </Route>
             </Routes>
             </Suspense>
+            </AnalyticsWrapper>
           </BrowserRouter>
         </AuthProvider>
       </LanguageProvider>
