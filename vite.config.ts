@@ -194,26 +194,22 @@ export default defineConfig(({ mode }) => {
       build: {
         rollupOptions: {
           output: {
-            manualChunks: (id) => {
-              // Vendor chunks
+            manualChunks(id) {
+              // Only split large vendor libraries
               if (id.includes('node_modules')) {
-                // React vendor
-                if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-                  return 'react-vendor';
+                // Keep React together - don't split React/ReactDOM
+                if (id.includes('react') || id.includes('react-dom')) {
+                  // Keep all React related together to avoid duplicate instances
+                  return undefined; // Let Vite handle React chunking automatically
                 }
-                // Editor vendor - lazy loaded only when needed (admin routes)
+                // Editor - large chunk, split it
                 if (id.includes('@tiptap') || id.includes('prosemirror')) {
                   return 'editor-vendor';
                 }
-                // Appwrite vendor
+                // Appwrite - medium chunk
                 if (id.includes('appwrite')) {
                   return 'appwrite-vendor';
                 }
-                return 'vendor';
-              }
-              // Don't create editor chunk unless it's actually used
-              if (id.includes('admin') && (id.includes('PostEditor') || id.includes('RichTextEditor'))) {
-                return 'editor-vendor';
               }
             },
           },
